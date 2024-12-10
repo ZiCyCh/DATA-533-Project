@@ -34,7 +34,13 @@ class Booking:
         Booking._bookings.append(self)
 
     def cancel_booking(self):
-        self.status = "Cancelled"
+        try:
+            if self.status != "Active":
+                raise BookingError("Cannot cancel a non-active booking.")
+            self.status = "Cancelled"
+        except BookingError as e:
+            print(f"Error: {e}")
+
         if isinstance(self.resource, Vehicle):
             self.resource.mark_as_available()
         elif isinstance(self.resource, Fleet):

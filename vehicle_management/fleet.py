@@ -15,7 +15,13 @@ class Fleet:
         self.vehicles.append(vehicle)
 
     def remove_vehicle_by_plate(self, license_plate):
-        self.vehicles = [vehicle for vehicle in self.vehicles if vehicle.license_plate != license_plate]
+        try:
+            if vehicle not in self.vehicles:
+                raise ValueError(f"Vehicle {vehicle.license_plate} is not in the fleet.")
+            self.vehicles.remove(vehicle)
+        except ValueError as e:
+            print(f"Error: {e}")
+
 
     def list_available_vehicles(self):
         return [str(vehicle) for vehicle in self.vehicles if vehicle.is_available]
