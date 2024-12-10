@@ -1,7 +1,7 @@
 # `car_sharing_system` Package
 ### Author: Tianmu Wang, Zifei Chen
 
-[![Build Status](https://app.travis-ci.com/ZiCyCh/DATA-533-Project.svg?token=KaE51Hsmx16ieM97YPhA&branch=step3-zf)](https://app.travis-ci.com/ZiCyCh/DATA-533-Project)
+[![Build Status](https://app.travis-ci.com/ZiCyCh/DATA-533-Project.svg?token=KaE51Hsmx16ieM97YPhA&branch=main)](https://app.travis-ci.com/ZiCyCh/DATA-533-Project)
 
 The `car_sharing_system` Package is a modular framework for managing a car-sharing platform. It is divided into two sub-packages: **booking_management** and **vehicle_management**.
 
