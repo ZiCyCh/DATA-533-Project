@@ -16,9 +16,10 @@ class Fleet:
 
     def remove_vehicle_by_plate(self, license_plate):
         try:
-            if vehicle not in self.vehicles:
-                raise ValueError(f"Vehicle {vehicle.license_plate} is not in the fleet.")
-            self.vehicles.remove(vehicle)
+            found_vehicle = self.find_vehicle_by_plate(license_plate)
+            if not found_vehicle:
+                raise ValueError(f"Vehicle is not in the fleet.")
+            self.vehicles.remove(found_vehicle)
         except ValueError as e:
             print(f"Error: {e}")
 

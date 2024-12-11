@@ -71,8 +71,18 @@ def read_data(fleet):
                     if not user:
                         user = User(row[0], row[1])
                     resource = fleet.find_vehicle_by_plate(row[2]) if row[2] != "Fleet" else fleet
+
+                    # Temporarily mark the vehicle as available
+                    if isinstance(resource, Vehicle) and not resource.is_available:
+                        resource.is_available = True
+
                     booking = Booking(user, resource, row[3], row[4])
                     booking.status = row[5]
+
+                    # Restore original availability
+                    if isinstance(resource, Vehicle) and booking.status == "Active":
+                        resource.is_available = False
+
 
 def run_car_sharing_system():
     fleet = Fleet()
@@ -201,7 +211,7 @@ def run_car_sharing_system():
                 name = input("Enter new name (leave blank to keep current): ")
                 new_email = input("Enter new email (leave blank to keep current): ")
                 try:
-                    user.update_details(name=name or user.name, email=new_email or user.email)
+                    user.update_user_details(name=name or user.name, email=new_email or user.email)
                     print(f"User updated: {user}")
                 except ValueError as e:
                     print(f"Error: {e}")
@@ -218,11 +228,17 @@ def run_car_sharing_system():
 
         elif choice == 10:
             license_plate = input("Enter vehicle license plate to remove: ")
-            try:
-                fleet.remove_vehicle_by_plate(license_plate)
-                print(f"Vehicle with license plate {license_plate} removed.")
-            except ValueError as e:
-                print(f"Error: {e}")
+            found_vehicle = fleet.find_vehicle_by_plate(license_plate)
+            if found_vehicle:
+                try:
+                    fleet.remove_vehicle_by_plate(license_plate)
+                    print(f"Vehicle with license plate {license_plate} removed.")
+                except ValueError as e:
+                    print(f"Error: {e}")
+            else:
+                print(f"Error: Vehicle with license plate {license_plate} is not in the fleet.")
+
+
 
         elif choice == 11:
             license_plate = input("Enter vehicle license plate to find: ")

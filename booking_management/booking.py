@@ -1,5 +1,7 @@
+class BookingError(Exception):
+    """Custom exception for Booking-related errors."""
+    pass
 
-# car_sharing_system/booking_management/booking.py
 
 from vehicle_management.vehicle import Vehicle
 from vehicle_management.fleet import Fleet
