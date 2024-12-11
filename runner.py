@@ -72,16 +72,26 @@ def read_data(fleet):
                         user = User(row[0], row[1])
                     resource = fleet.find_vehicle_by_plate(row[2]) if row[2] != "Fleet" else fleet
 
-                    # Temporarily mark the vehicle as available
-                    if isinstance(resource, Vehicle) and not resource.is_available:
-                        resource.is_available = True
+                    # Handle unavailable vehicles for fleet resources
+                    unavailable_vehicles = []
+                    if isinstance(resource, Fleet):
+                        unavailable_vehicles = [v for v in resource.vehicles if not v.is_available]
+                        for vehicle in unavailable_vehicles:
+                            vehicle.is_available = True
 
-                    booking = Booking(user, resource, row[3], row[4])
-                    booking.status = row[5]
+                    try:
+                        # Create the booking
+                        booking = Booking(user, resource, row[3], row[4])
+                        booking.status = row[5]
+                    except ValueError as e:
+                        print(f"Error while reading booking: {e}")
+                    finally:
+                        # Restore vehicle availability
+                        for vehicle in unavailable_vehicles:
+                            vehicle.is_available = False
 
-                    # Restore original availability
-                    if isinstance(resource, Vehicle) and booking.status == "Active":
-                        resource.is_available = False
+
+
 
 
 def run_car_sharing_system():
