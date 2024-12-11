@@ -6,7 +6,7 @@ class User:
 
     def __init__(self, name, email):
         if any(user.name == name and user.email == email for user in User._users):
-            print("user's information has been updated")
+            raise ValueError("User already exists.")
         self.name = name
         self.email = email
         User._users.append(self)
