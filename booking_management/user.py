@@ -19,14 +19,22 @@ class User:
         Update the user's name and/or email.
         Ensures no duplicates are created during the update process.
         """
+
         if name:
             if any(user.name == name and user.email == (email or self.email) for user in User._users if user != self):
                 raise ValueError("Updating to this name and email would create a duplicate user.")
             self.name = name
         if email:
-            if any(user.email == email and user.name == (name or self.name) for user in User._users if user != self):
-                raise ValueError("Updating to this name and email would create a duplicate user.")
-            self.email = email
+            try:
+                if '@' not in new_email:
+                    raise ValueError("Invalid email address.")
+                if any(user.email == email and user.name == (name or self.name) for user in User._users if
+                       user != self):
+                    raise ValueError("Updating to this name and email would create a duplicate user.")
+                self.email = email
+            except ValueError as e:
+                print(f"Error: {e}")
+
 
     @classmethod
     def find_user_by_email(cls, email):

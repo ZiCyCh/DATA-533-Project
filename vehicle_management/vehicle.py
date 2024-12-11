@@ -1,5 +1,11 @@
 
 # car_sharing_system/vehicle_management/vehicle.py
+class BookingError(Exception):
+    """Custom exception for booking-related errors."""
+    def __init__(self, message):
+        self.message = message
+        super().__init__(self.message)
+
 
 class Vehicle:
     def __init__(self, vehicle_type, license_plate, make, model):
@@ -10,10 +16,20 @@ class Vehicle:
         self.is_available = True
 
     def mark_as_rented(self):
-        self.is_available = False
+        try:
+            if not self.is_available:
+                raise BookingError(f"Vehicle {self.license_plate} is already rented.")
+            self.is_available = False
+        except BookingError as e:
+            print(f"Error: {e}")
 
     def mark_as_available(self):
-        self.is_available = True
+        try:
+            if self.is_available:
+                raise BookingError(f"Vehicle {self.license_plate} is already available.")
+            self.is_available = True
+        except BookingError as e:
+            print(f"Error: {e}")
 
     def update_details(self, vehicle_type=None, make=None, model=None):
         if vehicle_type:
